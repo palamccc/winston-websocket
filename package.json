@@ -1,0 +1,26 @@
+{
+  "name": "winston-websocket",
+  "version": "0.1.0",
+  "description": "Websocket Transport for Winston logger using the lightweight ws websocket library.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/palamccc/winston-websocket"
+  },
+  "keywords": [
+    "winston",
+    "websocket",
+    "transport",
+    "logs"
+  ],
+  "author": "Palam[DOT]c[AT]gmail[DOT]com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/palamccc/winston-websocket/issues"
+  },
+  "homepage": "https://github.com/palamccc/winston-websocket",
+  "dependencies": {
+    "winston": "^0.7.3",
+    "ws": "^0.4.31"
+  }
+}
