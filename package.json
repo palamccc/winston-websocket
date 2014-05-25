@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/palamccc/winston-websocket",
   "dependencies": {
-    "winston": "^0.7.3",
     "ws": "^0.4.31"
   }
 }

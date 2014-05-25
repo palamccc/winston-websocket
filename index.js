@@ -5,7 +5,7 @@ var util = require("util");
 var WSTransport = function(options) {
   this.name = options.name || "wstransport";
   this.level = options.level || "debug";
-  this.logs = [];
+  this.archive = [];
   startWSServer(options.wsoptions, options.authCallback, options.app, this.name);
 };
 
@@ -17,8 +17,8 @@ WSTransport.prototype.log = function(level, msg, meta, callback) {
     message: msg,
     createdAt: new Date().toISOString()
   };
-  this.logs.push(curlog);
-  if (this.logs.length > 500) this.logs.splice(0, this.logs.length - 500);
+  this.archive.push(curlog);
+  if (this.archive.length > 500) this.archive.splice(0, this.archive.length - 500);
   this.emit('logtransmit', curlog);
   callback(null, true);
 };
@@ -32,19 +32,25 @@ var startWSServer = function(options, authCallback, app, loggerName) {
   });
 };
 
+var dummyFunc = function(){};
+
 var getVerifyFunc = function(authCallback, app) {
   return function(info, verifyCallback) {
     var req = info.req;
     req.url = "/__websocketproxy__" + req.url;
     req.isWebSocketProxy = true;
-    var res = { setHeader: function() {} };
+    var res = { 
+      setHeader: dummyFunc,
+      output: { push: dummyFunc },
+      outputEncodings: { push: dummyFunc }
+    };
     req.websocketProxyEnd = function() { authCallback(req, verifyCallback); };
     app(info.req, res);
   };
 };
 
 var attachWSToLogger = function(ws, memLogger) {
-  ws.send(JSON.stringify(memLogger.logs));
+  ws.send(JSON.stringify(memLogger.archive));
   var transmitListener = function(log) {
     if (ws.readyState === 1) 
       ws.send(JSON.stringify([log]));
