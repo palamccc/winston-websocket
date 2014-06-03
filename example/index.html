@@ -1,0 +1,16 @@
+<html>
+  <body>
+  <h1>Live Logs</h1>
+  <div id="live-logs"></div>
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>
+    var appendLog = function(l){
+      $('<div>').text(l.level.toUpperCase() + ' ' + l.createdAt + ' ' + l.message).prependTo('#live-logs');
+    };
+    var loc = window.location
+    var uri = ( loc.protocol == 'https:' ? 'wss://' : 'ws://' ) + window.location.host + "/logs";
+    ws = new WebSocket(uri); 
+    ws.onmessage = function(e){ JSON.parse(e.data).forEach(appendLog) };  
+  </script>
+  </body>
+</html>
